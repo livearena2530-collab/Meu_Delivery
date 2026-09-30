@@ -3,129 +3,460 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel - JoyFoods Delivery</title>
+    <title>Gestão - JoyFoods</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background: #f4f4f4; display: flex; justify-content: center; padding: 40px 20px; }
-        .admin-box { background: #fff; padding: 30px; border-radius: 12px; width: 100%; max-width: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: #ea1d2c; margin-bottom: 25px; font-weight: 800; }
+        :root { --primary: #ea1d2c; --bg: #f4f4f4; --text: #333; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: var(--text); }
+        .container { max-width: 800px; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; }
+        
+        /* Login Screen */
+        #login-screen { padding: 40px 20px; text-align: center; }
+        .login-input { padding: 15px; font-size: 1.2rem; text-align: center; border: 2px solid #ddd; border-radius: 8px; margin-bottom: 15px; width: 100%; max-width: 300px; }
+        
+        /* Tabs */
+        .tabs { display: flex; background: #111; color: #fff; }
+        .tab { flex: 1; padding: 15px; text-align: center; font-weight: 800; cursor: pointer; transition: 0.2s; }
+        .tab.active { background: var(--primary); }
+        .tab-content { display: none; padding: 30px; }
+        .tab-content.active { display: block; }
+        
+        /* Formulário */
         .form-group { margin-bottom: 15px; }
-        label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; color: #333; }
+        label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 0.9rem; }
         input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; font-family: inherit; box-sizing: border-box; }
-        input:focus, select:focus, textarea:focus { border-color: #ea1d2c; outline: none; }
-        .btn-submit { background: #ea1d2c; color: #fff; border: none; padding: 15px; width: 100%; font-size: 1rem; font-weight: 800; border-radius: 8px; cursor: pointer; transition: 0.2s; margin-top: 10px; }
-        .btn-submit:active { transform: scale(0.98); }
-        .btn-submit:disabled { background: #ff7b85; cursor: not-allowed; }
-        .msg { display: none; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: center; font-weight: 600; font-size: 0.9rem; }
-        .msg.success { display: block; background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .msg.error { display: block; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        .helper-text { font-size: 0.75rem; color: #777; margin-top: 4px; display: block; }
+        .btn-submit { background: var(--primary); color: #fff; border: none; padding: 15px; width: 100%; font-size: 1rem; font-weight: 800; border-radius: 8px; cursor: pointer; }
+        
+        /* Modal de Confirmação Customizado */
+        .custom-dialog-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 20px; }
+        .custom-dialog-box { background: #fff; border-radius: 14px; padding: 25px; max-width: 360px; width: 100%; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.25); animation: popModal 0.2s ease-out; }
+        @keyframes popModal { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .custom-dialog-title { font-weight: 900; font-size: 1.15rem; margin-bottom: 8px; color: var(--text); }
+        .custom-dialog-text { font-size: 0.88rem; color: #666; margin-bottom: 22px; line-height: 1.4; }
+        .custom-dialog-actions { display: flex; gap: 10px; justify-content: center; }
+        .btn-dialog { padding: 11px 20px; border-radius: 8px; font-weight: 800; border: none; cursor: pointer; font-size: 0.88rem; flex: 1; }
+        .btn-dialog-confirm { background: #ff4d4d; color: #fff; }
+        .btn-dialog-cancel { background: #eee; color: #333; }
+
+        /* Lista de Produtos */
+        .product-list { display: flex; flex-direction: column; gap: 10px; }
+        .product-item { display: flex; align-items: center; justify-content: space-between; padding: 15px; border: 1px solid #eee; border-radius: 8px; background: #fafafa; }
+        .product-info { flex: 1; }
+        .product-title { font-weight: 800; font-size: 1rem; }
+        .product-cat { font-size: 0.75rem; color: #777; text-transform: uppercase; font-weight: 800; }
+        .product-actions { display: flex; gap: 10px; }
+        .btn-action { padding: 8px 12px; border: none; border-radius: 4px; font-weight: 800; cursor: pointer; font-size: 0.8rem; }
+        .btn-toggle.active { background: #50a773; color: white; }
+        .btn-toggle.inactive { background: #ccc; color: #333; }
+        .btn-edit { background: #007bff; color: white; }
+        .btn-delete { background: #ff4d4d; color: white; }
+
+        .helper { font-size: 0.75rem; color: #777; margin-top: 4px; display: block; }
+        .msg { padding: 15px; border-radius: 8px; margin-top: 15px; text-align: center; font-weight: 600; display: none; }
     </style>
 </head>
 <body>
 
-<div class="admin-box">
-    <h2>Cadastrar Produto</h2>
-    
-    <form id="form-produto">
-        <div class="form-group">
-            <label>Categoria</label>
-            <select id="categoria" required>
-                <option value="Lanches">Lanches</option>
-                <option value="Pizzas">Pizzas</option>
-                <option value="Bebidas">Bebidas</option>
-                <option value="Sobremesas">Sobremesas</option>
-            </select>
-        </div>
+<div class="container" id="login-container">
+    <div id="login-screen">
+        <h2 style="color:var(--primary); font-weight:900;">Acesso Restrito</h2>
+        <p style="margin-bottom:20px; color:#666;">Digite a senha para acessar o painel.</p>
+        <input type="password" id="password" class="login-input" placeholder="Senha">
+        <br>
+        <button class="btn-submit" style="max-width:300px;" onclick="checkPassword()">Entrar</button>
+        <div id="login-error" style="display:none; color:var(--primary); margin-top:12px; font-weight:700; font-size:0.9rem;">Senha incorreta! Tente novamente.</div>
+    </div>
+</div>
 
-        <div class="form-group">
-            <label>Nome do Produto</label>
-            <input type="text" id="nome" placeholder="Ex: Heineken 330ml" required>
-        </div>
+<div class="container" id="admin-container" style="display:none;">
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('add')">Cadastrar Produto</div>
+        <div class="tab" onclick="switchTab('manage'); loadProducts();">Gerenciar Cardápio</div>
+    </div>
 
-        <div class="form-group">
-            <label>Descrição</label>
-            <textarea id="descricao" rows="3" placeholder="Ex: Cerveja long neck gelada" required></textarea>
-        </div>
+    <!-- Aba Adicionar -->
+    <div id="tab-add" class="tab-content active">
+        <form id="form-produto">
+            <div class="form-group">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <label style="margin-bottom:0;">Categoria</label>
+                    <button type="button" id="btn-toggle-cat" onclick="toggleNewCategoryMode()" style="background:none; border:none; color:var(--primary); font-weight:800; cursor:pointer; font-size:0.8rem; text-decoration:underline;">
+                        + Nova Categoria
+                    </button>
+                </div>
 
-        <div class="form-group">
-            <label>Preço (R$)</label>
-            <input type="number" step="0.01" id="preco" placeholder="Ex: 8.50" required>
-        </div>
+                <!-- Modo 1: Escolher de categorias existentes -->
+                <div id="cat-select-wrapper">
+                    <select id="categoria-select" onchange="handleCategorySelect(this.value)">
+                        <option value="">Selecione uma categoria...</option>
+                        <option value="Lanches">🍔 Lanches</option>
+                        <option value="Pizzas">🍕 Pizzas</option>
+                        <option value="Bebidas">🍻 Bebidas</option>
+                        <option value="Combos">🍟 Combos</option>
+                        <option value="Sobremesas">🍰 Sobremesas</option>
+                        <option value="Porções">🍗 Porções</option>
+                        <option value="__NEW__">➕ Outra (Escrever nova)...</option>
+                    </select>
+                </div>
 
-        <div class="form-group">
-            <label>Link da Imagem (URL)</label>
-            <input type="url" id="imagem" placeholder="https://..." required>
-            <span class="helper-text">Copie o link de uma imagem da internet (terminada em .jpg, .png).</span>
-        </div>
+                <!-- Modo 2: Digitar uma nova categoria -->
+                <div id="cat-custom-wrapper" style="display:none; margin-top:6px;">
+                    <div style="display:flex; gap:8px;">
+                        <input type="text" id="categoria-custom-input" placeholder="Digite a nova categoria (ex: Açaí, Pastéis...)" oninput="handleCategoryCustomInput(this.value)">
+                        <button type="button" onclick="cancelNewCategoryMode()" style="padding:0 14px; background:#f0f0f0; border:1px solid #ccc; border-radius:8px; font-weight:700; cursor:pointer; font-size:0.82rem; white-space:nowrap;">Voltar à lista</button>
+                    </div>
+                    <span class="helper">Esta nova categoria aparecerá automaticamente nos filtros do cardápio!</span>
+                </div>
 
-        <div class="form-group">
-            <label>Adicionais (Opcional)</label>
-            <input type="text" id="adicionais" placeholder="Ex: Gelo:2.00; Limão:1.50">
-            <span class="helper-text">Formato: Nome:Preco; Nome2:Preco2. Separe com ponto e vírgula (;).</span>
-        </div>
+                <!-- Campo oculto que guarda o valor final validado -->
+                <input type="hidden" id="categoria" required>
+            </div>
+            <div class="form-group">
+                <label>Nome do Produto</label>
+                <input type="text" id="nome" placeholder="Ex: X-Burguer Duplo" required>
+            </div>
+            <div class="form-group">
+                <label>Descrição</label>
+                <textarea id="descricao" rows="2" placeholder="Ex: Pão, duas carnes, queijo..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Preço (R$)</label>
+                <input type="number" step="0.01" id="preco" placeholder="Ex: 25.50" required>
+            </div>
+            <div class="form-group">
+                <label>Imagem (Link)</label>
+                <input type="url" id="imagem" placeholder="https://..." required>
+                <span class="helper">Dica: Use o site <b>postimages.org</b> para subir uma foto do celular e cole o "Link Direto" aqui.</span>
+            </div>
+            <div class="form-group">
+                <label>Adicionais (Opcional)</label>
+                <input type="text" id="adicionais" placeholder="Ex: Bacon:4.50; Ovo:2.00">
+                <span class="helper">Formato: Nome:Preco; Nome2:Preco2. (Separado por ponto e vírgula)</span>
+            </div>
+            
+            <!-- Campo oculto para guardar o ID quando estiver editando -->
+            <input type="hidden" id="produto-id-edit">
+            
+            <div style="display:flex; gap:10px;">
+                <button type="submit" class="btn-submit" id="btn-submit">Salvar na Planilha</button>
+                <button type="button" class="btn-submit" id="btn-cancel-edit" style="display:none; background:#888;" onclick="cancelEditMode()">Cancelar Edição</button>
+            </div>
+            <div id="msg-add" class="msg"></div>
+        </form>
+    </div>
 
-        <button type="submit" class="btn-submit" id="btn-submit">Salvar na Planilha</button>
-        
-        <div id="mensagem" class="msg"></div>
-    </form>
+    <div id="tab-manage" class="tab-content">
+        <div style="margin-bottom: 20px; font-weight: 800; display:flex; justify-content:space-between; align-items:center;">
+            Seus Produtos
+            <button onclick="loadProducts()" style="padding:8px; cursor:pointer;">Atualizar 🔄</button>
+        </div>
+        <div class="product-list" id="product-list">
+            Carregando produtos...
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Confirmação para Exclusão sem alert/confirm -->
+<div id="confirm-delete-modal" class="custom-dialog-overlay">
+    <div class="custom-dialog-box">
+        <h4 class="custom-dialog-title">Excluir Produto?</h4>
+        <p class="custom-dialog-text">Tem certeza que deseja apagar este produto permanentemente da planilha?</p>
+        <div class="custom-dialog-actions">
+            <button class="btn-dialog btn-dialog-cancel" onclick="closeDeleteModal()">Cancelar</button>
+            <button class="btn-dialog btn-dialog-confirm" id="btn-confirm-delete" onclick="confirmExecuteDelete()">Sim, Excluir</button>
+        </div>
+    </div>
 </div>
 
 <script>
-    // SEU LINK OFICIAL AQUI
+    // COLOQUE SEU LINK DO GOOGLE AQUI
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwQjSrJA8FnIpxfrSfw_cPjpeTLvPfhrUotlJUaU6EylD8TJNsQ5LPTVHIRHL9PK-rXIw/exec';
+    
+    let globalProductsList = []; // Guarda os produtos na memória para facilitar a edição
+    
+    function handleCategorySelect(val) {
+        if (val === '__NEW__') {
+            toggleNewCategoryMode();
+        } else {
+            document.getElementById('categoria').value = val;
+        }
+    }
+
+    function toggleNewCategoryMode() {
+        document.getElementById('cat-select-wrapper').style.display = 'none';
+        document.getElementById('cat-custom-wrapper').style.display = 'block';
+        document.getElementById('btn-toggle-cat').style.display = 'none';
+        const customInput = document.getElementById('categoria-custom-input');
+        customInput.focus();
+        document.getElementById('categoria').value = customInput.value.trim();
+    }
+
+    function cancelNewCategoryMode() {
+        document.getElementById('cat-select-wrapper').style.display = 'block';
+        document.getElementById('cat-custom-wrapper').style.display = 'none';
+        document.getElementById('btn-toggle-cat').style.display = 'inline';
+        const select = document.getElementById('categoria-select');
+        select.value = '';
+        document.getElementById('categoria-custom-input').value = '';
+        document.getElementById('categoria').value = '';
+    }
+
+    function handleCategoryCustomInput(val) {
+        document.getElementById('categoria').value = val.trim();
+    }
+
+    // Sincroniza o select com todas as categorias já criadas na planilha
+    function syncCategoriesDropdown(products) {
+        const select = document.getElementById('categoria-select');
+        if (!select || !products) return;
+
+        const defaultCats = ['Lanches', 'Pizzas', 'Bebidas', 'Combos', 'Sobremesas', 'Porções'];
+        const sheetCats = [...new Set(products.map(p => (p.categoria || p.category || '').trim()).filter(Boolean))];
+        const extraCats = sheetCats.filter(c => !defaultCats.map(d => d.toLowerCase()).includes(c.toLowerCase()));
+
+        let optionsHtml = `<option value="">Selecione uma categoria...</option>`;
+        defaultCats.forEach(c => {
+            optionsHtml += `<option value="${c}">${c}</option>`;
+        });
+
+        if (extraCats.length > 0) {
+            optionsHtml += `<optgroup label="Suas Categorias Cadastradas">`;
+            extraCats.forEach(c => {
+                optionsHtml += `<option value="${c}">⭐ ${c}</option>`;
+            });
+            optionsHtml += `</optgroup>`;
+        }
+
+        optionsHtml += `<option value="__NEW__">➕ Outra (Escrever nova)...</option>`;
+        select.innerHTML = optionsHtml;
+    }
+
+    function checkPassword() {
+        if(document.getElementById('password').value === '123456') {
+            document.getElementById('login-container').style.display = 'none';
+            document.getElementById('admin-container').style.display = 'block';
+            loadProducts(); // Pré-carrega produtos e categorias
+        } else {
+            const err = document.getElementById('login-error');
+            err.style.display = 'block';
+            setTimeout(() => { err.style.display = 'none'; }, 3000);
+        }
+    }
+
+    function switchTab(tab) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+        document.getElementById(`tab-${tab}`).classList.add('active');
+    }
 
     document.getElementById('form-produto').addEventListener('submit', async (e) => {
         e.preventDefault();
-        
         const btn = document.getElementById('btn-submit');
-        const msgDiv = document.getElementById('mensagem');
-        
-        // Bloqueia o botão e mostra carregamento
-        btn.disabled = true;
-        btn.innerText = "Salvando produto, aguarde...";
-        msgDiv.className = 'msg';
+        const msgDiv = document.getElementById('msg-add');
+
+        const categoriaEscolhida = document.getElementById('categoria').value.trim();
+        if (!categoriaEscolhida) {
+            msgDiv.innerHTML = "⚠️ Por favor, selecione ou digite uma categoria.";
+            msgDiv.style.display = 'block';
+            msgDiv.style.background = '#fff3cd'; msgDiv.style.color = '#856404';
+            setTimeout(() => msgDiv.style.display = 'none', 3000);
+            return;
+        }
+
+        btn.disabled = true; btn.innerText = "Salvando...";
+
+        const editId = document.getElementById('produto-id-edit').value;
+        const acao = editId ? 'edit' : 'add'; // Define se vai criar um novo ou editar
 
         const produto = {
-            id: 'PROD-' + Date.now(),
-            categoria: document.getElementById('categoria').value,
-            nome: document.getElementById('nome').value,
-            descricao: document.getElementById('descricao').value,
+            action: acao,
+            id: editId || undefined,
+            categoria: categoriaEscolhida,
+            nome: document.getElementById('nome').value.trim(),
+            descricao: document.getElementById('descricao').value.trim(),
             preco: document.getElementById('preco').value,
-            imagem: document.getElementById('imagem').value,
-            adicionais: document.getElementById('adicionais').value || ""
+            imagem: document.getElementById('imagem').value.trim(),
+            adicionais: document.getElementById('adicionais').value.trim() || ""
         };
 
         try {
-            // O segredo para não dar erro de CORS: enviar como text/plain
-            const response = await fetch(SCRIPT_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'text/plain;charset=utf-8'
-                },
-                body: JSON.stringify(produto)
-            });
-
-            const result = await response.json();
-
+            const res = await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(produto) });
+            const result = await res.json();
             if (result.status === 'success') {
-                msgDiv.innerText = "✅ Produto salvo com sucesso na planilha!";
-                msgDiv.className = 'msg success';
-                document.getElementById('form-produto').reset(); // Limpa o formulário
-            } else {
-                throw new Error("Erro do lado do servidor: " + (result.message || "Desconhecido"));
+                msgDiv.innerHTML = "✅ Produto salvo com sucesso!";
+                msgDiv.style.display = 'block';
+                msgDiv.style.background = '#d4edda'; msgDiv.style.color = '#155724';
+                document.getElementById('form-produto').reset();
+                cancelEditMode(); // Garante que saiu do modo de edição
+                cancelNewCategoryMode();
             }
         } catch (error) {
-            msgDiv.innerHTML = "❌ <b>Erro ao salvar.</b><br>Verifique se você publicou como 'Nova Versão' no Google Apps Script.";
-            msgDiv.className = 'msg error';
-            console.error(error);
+            msgDiv.innerHTML = "❌ Erro ao salvar.";
+            msgDiv.style.display = 'block';
+            msgDiv.style.background = '#f8d7da'; msgDiv.style.color = '#721c24';
         } finally {
-            // Libera o botão novamente
-            btn.disabled = false;
-            btn.innerText = "Salvar na Planilha";
+            btn.disabled = false; btn.innerText = "Salvar na Planilha";
+            setTimeout(() => msgDiv.style.display = 'none', 4000);
         }
     });
-</script>
 
+    async function loadProducts() {
+        const list = document.getElementById('product-list');
+        list.innerHTML = "Lendo planilha, aguarde...";
+        try {
+            const res = await fetch(SCRIPT_URL);
+            const result = await res.json();
+            if(result.status === 'success' && result.data.length > 0) {
+                globalProductsList = result.data; // Salva lista atual na memória
+                const prods = result.data.filter(p => p.nome && p.nome.trim() !== "");
+                syncCategoriesDropdown(prods);
+                list.innerHTML = prods.map(p => {
+                    const isAtivo = p.ativo !== false && p.ativo !== "FALSE";
+                    // Proteções para não mostrar UNDEFINED ou NaN em produtos antigos com erro
+                    const catNome = p.categoria && p.categoria !== "undefined" ? p.categoria : "Sem Categoria";
+                    const precoProd = parseFloat(p.preco || 0).toFixed(2);
+
+                    return `
+                    <div class="product-item">
+                        <div class="product-info">
+                            <div class="product-cat">${catNome}</div>
+                            <div class="product-title">${p.nome} - R$ ${precoProd}</div>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn-action btn-toggle ${isAtivo ? 'active' : 'inactive'}" onclick="toggleStatus('${p.id}', this)">
+                                ${isAtivo ? 'Ativo' : 'Esgotado'}
+                            </button>
+                            <button class="btn-action btn-edit" onclick="startEditProduct('${p.id}')">Editar</button>
+                            <button class="btn-action btn-delete" onclick="askDeleteProduct('${p.id}')">Excluir</button>
+                        </div>
+                    </div>`;
+                }).join('');
+            } else {
+                list.innerHTML = "Nenhum produto cadastrado.";
+            }
+        } catch (error) {
+            list.innerHTML = "Erro ao carregar lista.";
+        }
+    }
+
+    async function toggleStatus(id, btnElement) {
+        btnElement.innerText = "...";
+        try {
+            await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'toggleActive', id: id }) });
+            loadProducts();
+        } catch(e) { 
+            console.error("Erro ao alterar status:", e);
+        }
+    }
+
+    // --- STREAMING_CHUNK: Edit functionality helpers ---
+    function startEditProduct(id) {
+        const prod = globalProductsList.find(p => p.id === id);
+        if(!prod) return;
+
+        // Função à prova de falhas: ignora espaços invisíveis e letras maiúsculas nos cabeçalhos da planilha
+        const findValue = (keys) => {
+            const normalizedProd = {};
+            for (let k in prod) {
+                normalizedProd[k.toLowerCase().trim()] = prod[k];
+            }
+            for (let k of keys) {
+                if (normalizedProd[k] !== undefined && normalizedProd[k] !== null && normalizedProd[k] !== "undefined") {
+                    return normalizedProd[k];
+                }
+            }
+            return '';
+        };
+
+        // Preenche campos do formulário puxando por várias possibilidades
+        document.getElementById('produto-id-edit').value = prod.id || '';
+        document.getElementById('nome').value = findValue(['nome', 'name']);
+        document.getElementById('descricao').value = findValue(['descricao', 'descrição', 'desc', 'description']);
+        
+        // Trata o preço para garantir que vá para o campo de número sem bugar
+        let rawPrice = findValue(['preco', 'preço', 'price']);
+        if (typeof rawPrice === 'string') {
+            rawPrice = rawPrice.replace('R$', '').replace(',', '.').trim();
+        }
+        document.getElementById('preco').value = parseFloat(rawPrice) ? parseFloat(rawPrice) : '';
+
+        document.getElementById('imagem').value = findValue(['imagem', 'image', 'img', 'link']);
+        document.getElementById('adicionais').value = findValue(['adicionais', 'addons', 'extras']);
+
+        // Ajusta a Categoria no Select
+        const select = document.getElementById('categoria-select');
+        const customInput = document.getElementById('categoria-custom-input');
+        const catHidden = document.getElementById('categoria');
+        
+        let catValue = findValue(['categoria', 'category']).toString().trim();
+        
+        if (catValue === '' || catValue.toLowerCase() === 'undefined') {
+            // Se a categoria estiver com erro, limpa para o usuário escolher de novo
+            cancelNewCategoryMode();
+            select.value = '';
+            catHidden.value = '';
+        } else {
+            // Verifica se a categoria já existe na lista
+            let found = false;
+            for(let i = 0; i < select.options.length; i++) {
+                if(select.options[i].value === catValue) {
+                    select.value = catValue;
+                    found = true;
+                    cancelNewCategoryMode(); // Fecha o campo customizado
+                    break;
+                }
+            }
+            
+            // Se não encontrou na lista, abre o campo customizado com o nome que estava
+            if(!found) {
+                select.value = '__NEW__';
+                toggleNewCategoryMode();
+                customInput.value = catValue;
+            }
+            catHidden.value = catValue;
+        }
+
+        // Muda botões e aba
+        document.getElementById('btn-submit').innerText = "Salvar Alterações";
+        document.getElementById('btn-cancel-edit').style.display = 'block';
+        
+        switchTab('add');
+        window.scrollTo(0,0);
+    }
+
+    function cancelEditMode() {
+        document.getElementById('produto-id-edit').value = '';
+        document.getElementById('btn-submit').innerText = "Salvar na Planilha";
+        document.getElementById('btn-cancel-edit').style.display = 'none';
+        document.getElementById('form-produto').reset();
+        cancelNewCategoryMode();
+    }
+
+    let pendingDeleteId = null;
+
+    function askDeleteProduct(id) {
+        pendingDeleteId = id;
+        document.getElementById('confirm-delete-modal').style.display = 'flex';
+    }
+
+    function closeDeleteModal() {
+        pendingDeleteId = null;
+        document.getElementById('confirm-delete-modal').style.display = 'none';
+    }
+
+    async function confirmExecuteDelete() {
+        if(!pendingDeleteId) return;
+        const idToDelete = pendingDeleteId;
+        closeDeleteModal();
+        document.getElementById('product-list').innerHTML = "Apagando produto...";
+        try {
+            await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'delete', id: idToDelete }) });
+            loadProducts();
+        } catch(e) {
+            console.error("Erro ao apagar:", e);
+        }
+    }
+</script>
 </body>
 </html>
