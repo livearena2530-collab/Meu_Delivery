@@ -3,21 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>JoyFoods | Delivery</title>
-    <meta name="theme-color" content="#ea1d2c">
+    
+    <!-- Metatags para PWA / Mobile App -->
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="JoyFoods">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1046/1046784.png">
+    <meta name="theme-color" content="#ffffff">
     
-    <!-- Link para o Manifest do PWA -->
-    <link rel="manifest" href="manifest.json">
+    <title>JoyFoods | Delivery</title>
     
     <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/1046/1046784.png" type="image/png">
+    <link rel="manifest" href="manifest.json">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
-        /* --- STREAMING_CHUNK:Definindo as Variaveis de Cor e Base --- */
         :root { 
             --primary: #ea1d2c; 
             --primary-dark: #cc1523; 
@@ -63,7 +62,6 @@
             backdrop-filter: blur(2px); 
         }
         
-        /* --- STREAMING_CHUNK:Estilizando o Cabecalho --- */
         header { 
             background: var(--white); 
             position: sticky; 
@@ -80,7 +78,7 @@
             align-items: center; 
             justify-content: space-between; 
             gap: 20px; 
-            flex-wrap: wrap; 
+            flex-wrap: nowrap; 
         }
         
         .header-left { 
@@ -249,7 +247,6 @@
             font-weight: 700; 
         }
 
-        /* --- STREAMING_CHUNK:Estilizando Dropdown e Banners --- */
         .profile-dropdown { 
             position: absolute; 
             top: 60px; 
@@ -380,20 +377,12 @@
         }
         
         @media (min-width: 768px) { 
-            .carousel-slide { 
-                min-width: calc(50% - 15px); 
-                height: 200px; 
-                scroll-snap-align: start; 
-            } 
+            .carousel-slide { min-width: calc(50% - 15px); height: 200px; scroll-snap-align: start; } 
         }
-        
         @media (min-width: 1024px) { 
-            .carousel-slide { 
-                min-width: calc(33.333% - 15px); 
-            } 
+            .carousel-slide { min-width: calc(33.333% - 15px); } 
         }
 
-        /* --- STREAMING_CHUNK:Estilizando o Marketplace e Lojas --- */
         main { 
             flex: 1; 
             width: 100%; 
@@ -440,10 +429,63 @@
             background: #f2f2f2; 
         }
 
+        /* Nova Lógica de Grade e Lista (Stores Grid) */
         .stores-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
             gap: 20px; 
+            transition: 0.3s ease;
+        }
+        
+        .stores-grid.list-view {
+            grid-template-columns: 1fr;
+        }
+        
+        .stores-grid.list-view .store-card {
+            flex-direction: row;
+            text-align: left;
+        }
+        
+        .stores-grid.grid-view {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .stores-grid.grid-view .store-card {
+            flex-direction: column;
+            text-align: center;
+            padding: 15px 10px;
+        }
+        
+        .stores-grid.grid-view .store-logo {
+            margin-bottom: 8px;
+            width: 60px;
+            height: 60px;
+        }
+        
+        .stores-grid.grid-view .store-name {
+            justify-content: center;
+            font-size: 0.95rem;
+            white-space: normal;
+        }
+        
+        .stores-grid.grid-view .store-meta {
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+        
+        .stores-grid.grid-view .store-delivery {
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+        
+        @media (min-width: 768px) {
+            .stores-grid.list-view, .stores-grid.grid-view {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+            .stores-grid.grid-view .store-card {
+                flex-direction: row;
+                text-align: left;
+            }
         }
         
         .store-card { 
@@ -547,7 +589,6 @@
             height: 14px; 
         }
 
-        /* --- STREAMING_CHUNK:Estilizando o Menu da Loja --- */
         .store-header-info { 
             display: flex; 
             align-items: center; 
@@ -555,24 +596,51 @@
             margin-bottom: 30px; 
         }
         
+        .btn-back-store {
+            background: none; 
+            border: none; 
+            cursor: pointer; 
+            color: var(--primary); 
+            display: flex; 
+            align-items: center; 
+            padding: 4px; 
+            border-radius: 50%; 
+            transition: 0.2s; 
+            flex-shrink: 0;
+        }
+        
+        .btn-back-store:hover { 
+            background: #f2f2f2; 
+        }
+        
         .store-header-logo { 
             width: 90px; 
             height: 90px; 
             border-radius: 50%; 
             border: 1px solid var(--border); 
+            flex-shrink: 0;
+        }
+        
+        .store-header-text {
+            flex: 1;
+            min-width: 0;
         }
         
         .store-header-text h1 { 
             font-size: 1.8rem; 
             font-weight: 700; 
             margin-bottom: 5px; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis;
         }
         
         .store-header-meta { 
             color: var(--text-light); 
             display: flex; 
             align-items: center; 
-            gap: 10px; 
+            flex-wrap: wrap; 
+            gap: 5px 8px; 
             font-size: 0.95rem; 
         }
         
@@ -617,8 +685,8 @@
             font-size: 0.85rem; 
             color: var(--text-light); 
             line-height: 1.4; 
-            display: -webkit-box;
-            line-clamp: 2; /* Regra padrão atualizada para evitar warnings */
+            display: -webkit-box; 
+            line-clamp: 2; 
             -webkit-line-clamp: 2; 
             -webkit-box-orient: vertical; 
             overflow: hidden; 
@@ -639,7 +707,6 @@
             flex-shrink: 0; 
         }
 
-        /* --- STREAMING_CHUNK:Estilizando Modais e Carrinho --- */
         #cart-drawer { 
             position: fixed; 
             top: 0; 
@@ -958,11 +1025,6 @@
             70% { box-shadow: 0 0 0 8px rgba(234, 29, 44, 0); } 
         }
 
-        /* --- STREAMING_CHUNK:Estilizando o Mobile Search Header --- */
-        .mobile-search-header { 
-            display: none; 
-        }
-
         .bottom-nav { 
             display: none; 
             position: fixed; 
@@ -1195,52 +1257,230 @@
             background: var(--primary-dark); 
         }
         
-        /* --- STREAMING_CHUNK:Estilos Responsivos Completos --- */
+        .mobile-search-overlay {
+            position: fixed;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            background: var(--white);
+            z-index: 1000;
+            padding: 15px;
+            box-shadow: var(--shadow-md);
+            transition: top 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .mobile-search-overlay.open {
+            top: 0;
+        }
+        
+        .btn-close-search {
+            background: none;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .mobile-search-pill {
+            flex: 1;
+            background: #f2f2f2;
+            border-radius: 50px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+        }
+        
+        .mobile-search-pill svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--primary);
+        }
+        
+        .mobile-search-pill input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: transparent;
+            outline: none;
+            padding-left: 10px;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+        }
+
+        .floating-cart-bar {
+            position: fixed;
+            bottom: calc(70px + env(safe-area-inset-bottom));
+            left: 15px;
+            right: 15px;
+            background: var(--primary);
+            color: var(--white);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 8px 24px rgba(234, 29, 44, 0.4);
+            z-index: 85;
+            cursor: pointer;
+            transform: translateY(150%);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .floating-cart-bar.visible {
+            transform: translateY(0);
+        }
+        
+        .floating-cart-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .floating-store-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--white);
+            background: #fff; /* Evita ficar transparente se a logo atrasar */
+        }
+        
+        .floating-cart-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .floating-cart-text span:first-child {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+        
+        .floating-cart-text span:last-child {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .floating-cart-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
         @media (max-width: 768px) {
-            #product-details-modal .modal-box { flex-direction: column; width: 100%; height: 100%; max-height: none; border-radius: 0; }
-            .prod-left { width: 100%; height: 280px; flex-shrink: 0; }
-            .prod-right { width: 100%; flex: 1; padding: 20px; max-height: none; }
-            .prod-footer { position: sticky; bottom: 0; background: var(--white); margin: auto -20px -20px -20px; padding: 20px; box-shadow: 0 -4px 12px rgba(0,0,0,0.05); }
-            .btn-close-modal { top: 15px; left: 15px; right: auto; background: rgba(255,255,255,0.9); box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-            
-            .header-container { padding: 12px 15px; flex-wrap: nowrap; }
-            .nav-links, .location-btn, .profile-btn span, .cart-info { display: none; }
-            
-            /* Oculta a busca padrão no celular */
-            .search-container { display: none; } 
-            
-            /* Nova Barra de Busca Mobile (Estilo iFood) */
-            .mobile-search-header.active { 
-                display: flex; position: fixed; top: 0; left: 0; right: 0; height: 60px; 
-                background: var(--white); z-index: 200; align-items: center; padding: 0 15px; gap: 15px; 
-                box-shadow: var(--shadow-sm); animation: slideDown 0.2s ease;
+            .header-container { 
+                padding: 12px 15px; 
+            }
+            .nav-links, .location-btn, .cart-info { 
+                display: none; 
             }
             
-            .mobile-search-input-wrapper { flex: 1; background: #f2f2f2; border-radius: 8px; display: flex; align-items: center; padding: 0 10px; height: 40px;}
-            .mobile-search-input-wrapper input { width: 100%; border: none; background: transparent; outline: none; padding-left: 10px; font-size: 0.95rem; color: var(--text-dark); }
-            .btn-close-search { background: none; border: none; cursor: pointer; color: var(--text-dark); display: flex; align-items: center; justify-content: center; }
+            /* Oculta o search do cabeçalho e ícones redundantes no celular */
+            .search-container { 
+                display: none; 
+            }
+            #btn-header-profile, .cart-btn-header {
+                display: none;
+            }
 
-            .header-right { gap: 15px; }
-            .bottom-nav { display: flex; }
-            main { padding-bottom: 80px; }
+            .bottom-nav { 
+                display: flex; 
+            }
             
-            .menu-grid, .stores-grid { grid-template-columns: 1fr; }
+            main { 
+                padding-bottom: 120px; 
+            }
+            
+            .menu-grid { 
+                grid-template-columns: 1fr; 
+            }
             
             .profile-dropdown { 
                 position: fixed; 
-                bottom: 0; 
+                bottom: calc(70px + env(safe-area-inset-bottom)); 
                 top: auto; 
                 right: 0; 
                 width: 100%; 
                 border-radius: 16px 16px 0 0; 
                 border: none; 
+                z-index: 500; 
             }
-            .profile-dropdown.show { animation: slideUp 0.3s ease; }
-        }
+            
+            .profile-dropdown.show { 
+                animation: slideUp 0.3s ease; 
+            }
+            
+            @keyframes slideUp { 
+                from { transform: translateY(100%); } 
+                to { transform: translateY(0); } 
+            }
 
-        @keyframes slideUp { 
-            from { transform: translateY(100%); } 
-            to { transform: translateY(0); } 
+            .store-header-info { 
+                gap: 12px; 
+                margin-bottom: 20px; 
+            }
+            
+            .store-header-logo { 
+                width: 65px; 
+                height: 65px; 
+                flex-shrink: 0; 
+            }
+            
+            .store-header-text h1 { 
+                font-size: 1.35rem; 
+            }
+            
+            .store-header-meta { 
+                font-size: 0.85rem; 
+            }
+
+            #product-details-modal .modal-box { 
+                flex-direction: column; 
+                width: 100%; 
+                height: 100%; 
+                max-height: none; 
+                border-radius: 0; 
+            }
+            
+            .prod-left { 
+                width: 100%; 
+                height: 280px; 
+                flex-shrink: 0; 
+            }
+            
+            .prod-right { 
+                width: 100%; 
+                flex: 1; 
+                padding: 20px; 
+                max-height: none; 
+            }
+            
+            .prod-footer { 
+                position: sticky; 
+                bottom: 0; 
+                background: var(--white); 
+                margin: auto -20px -20px -20px; 
+                padding: 20px; 
+                box-shadow: 0 -4px 12px rgba(0,0,0,0.05); 
+            }
+            
+            .btn-close-modal { 
+                top: 15px; 
+                left: 15px; 
+                right: auto; 
+                background: rgba(255,255,255,0.9); 
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+            }
         }
     </style>
 </head>
@@ -1248,7 +1488,41 @@
 
 <div id="global-overlay" onclick="closeAllModais()"></div>
 
-<!-- --- STREAMING_CHUNK:Header Principal --- -->
+<div class="profile-dropdown" id="profile-dropdown">
+    <div class="dropdown-header">
+        <div class="dropdown-greeting" id="dropdown-greeting-name">Olá, visitante</div>
+        <div style="font-size: 0.85rem; color: var(--text-light);">Acesse sua conta agora</div>
+    </div>
+    <div class="dropdown-menu-list">
+        <div class="dropdown-item" onclick="openHistoryModal()">
+            <svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+            Pedidos
+        </div>
+        <div class="dropdown-item" onclick="showCustomModal('Cupons', 'Nenhum cupom disponível no momento.')">
+            <svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.41l9 9c.36.36.86.58 1.41.58s1.05-.22 1.41-.59l7-7c.38-.37.59-.88.59-1.41s-.23-1.04-.59-1.41zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
+            Meus Cupons
+        </div>
+        <div class="dropdown-item" onclick="showCustomModal('Ajuda', 'Entre em contato pelo WhatsApp de cada restaurante para tirar dúvidas sobre o pedido.')">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>
+            Ajuda
+        </div>
+        <div class="dropdown-item" id="btn-dropdown-logout" style="display: none;" onclick="logout()">
+            <svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+            Sair
+        </div>
+    </div>
+</div>
+
+<div class="mobile-search-overlay" id="mobileSearchOverlay">
+    <button class="btn-close-search" onclick="closeMobileSearch()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+    </button>
+    <div class="mobile-search-pill">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <input type="text" id="mobileSearchInput" placeholder="Item ou loja" oninput="handleSearch(this.value)">
+    </div>
+</div>
+
 <header id="main-header">
     <div class="header-container">
         <div class="header-left">
@@ -1264,7 +1538,6 @@
             </div>
         </div>
 
-        <!-- Ocultado via CSS no Mobile -->
         <div class="search-container">
             <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
             <input type="text" id="searchInput" placeholder="Busque por item ou loja" oninput="handleSearch(this.value)">
@@ -1282,31 +1555,6 @@
                     <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                     <span id="header-user-name">Entrar</span>
                 </button>
-                
-                <div class="profile-dropdown" id="profile-dropdown">
-                    <div class="dropdown-header">
-                        <div class="dropdown-greeting" id="dropdown-greeting-name">Olá, visitante</div>
-                        <div style="font-size: 0.85rem; color: var(--text-light);">Acesse sua conta agora</div>
-                    </div>
-                    <div class="dropdown-menu-list">
-                        <div class="dropdown-item" onclick="openHistoryModal()">
-                            <svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-                            Pedidos
-                        </div>
-                        <div class="dropdown-item" onclick="showCustomModal('Cupons', 'Nenhum cupom disponível no momento.')">
-                            <svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.41l9 9c.36.36.86.58 1.41.58s1.05-.22 1.41-.59l7-7c.38-.37.59-.88.59-1.41s-.23-1.04-.59-1.41zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
-                            Meus Cupons
-                        </div>
-                        <div class="dropdown-item" onclick="showCustomModal('Ajuda', 'Entre em contato pelo WhatsApp de cada restaurante para tirar dúvidas sobre o pedido.')">
-                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>
-                            Ajuda
-                        </div>
-                        <div class="dropdown-item" id="btn-dropdown-logout" style="display: none;" onclick="logout()">
-                            <svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
-                            Sair
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <button class="cart-btn-header" onclick="toggleCart()">
@@ -1323,24 +1571,11 @@
     </div>
 </header>
 
-<!-- --- STREAMING_CHUNK:Barra de Busca Mobile Overlay --- -->
-<!-- Barra de Busca Mobile Animada (Invisível por padrão) -->
-<div class="mobile-search-header" id="mobileSearchHeader">
-    <button class="btn-close-search" onclick="closeMobileSearch()">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-    </button>
-    <div class="mobile-search-input-wrapper">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="var(--primary)"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-        <input type="text" id="mobileSearchInput" placeholder="Busque por item ou loja" oninput="handleSearch(this.value)">
-    </div>
-</div>
-
 <div class="green-banner">
     <svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.41l9 9c.36.36.86.58 1.41.58s1.05-.22 1.41-.59l7-7c.38-.37.59-.88.59-1.41s-.23-1.04-.59-1.41zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
     Você tem 2 cupons! Aproveite seus descontos
 </div>
 
-<!-- --- STREAMING_CHUNK:Corpo do Marketplace e Loja --- -->
 <main id="marketplace-view">
     <div class="promo-carousel">
         <div class="carousel-track" id="promo-track">
@@ -1352,8 +1587,13 @@
     </div>
 
     <div class="section-block">
-        <h2 class="section-title">Lojas</h2>
-        <div class="stores-grid" id="stores-list-container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 class="section-title" style="margin-bottom: 0;">Lojas</h2>
+            <button id="layout-toggle-btn" onclick="toggleStoreLayout()" style="background: none; border: none; color: var(--text-light); cursor: pointer; padding: 5px;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 0h6v6h-6v-6z"/></svg>
+            </button>
+        </div>
+        <div class="stores-grid list-view" id="stores-list-container">
             <p style="text-align:center; padding: 40px; color:var(--text-light); font-weight:600; grid-column: 1/-1;">Carregando lojas...</p>
         </div>
     </div>
@@ -1374,7 +1614,17 @@
     </div>
 </main>
 
-<!-- --- STREAMING_CHUNK:Carrinho e Modais do Sistema --- -->
+<div class="floating-cart-bar" id="floating-cart-bar" onclick="toggleCart()">
+    <div class="floating-cart-left">
+        <img id="floating-store-logo" class="floating-store-img" src="https://cdn-icons-png.flaticon.com/512/1046/1046784.png" alt="Loja">
+        <div class="floating-cart-text">
+            <span id="floating-cart-items-count">0 itens</span>
+            <span id="floating-cart-total">R$ 0,00</span>
+        </div>
+    </div>
+    <button class="floating-cart-btn">Ver sacola</button>
+</div>
+
 <div id="cart-drawer">
     <div class="drawer-header">
         <span>Sua Sacola</span>
@@ -1511,13 +1761,12 @@
     </div>
 </div>
 
-<!-- --- STREAMING_CHUNK:Barra de Navegacao Inferior (Mobile) --- -->
 <nav class="bottom-nav">
     <button class="nav-item active" onclick="goBackToMarketplace()">
         <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
         <span>Início</span>
     </button>
-    <button class="nav-item" onclick="handleSearchClickMobile()">
+    <button class="nav-item" onclick="openMobileSearch()">
         <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
         <span>Busca</span>
     </button>
@@ -1532,8 +1781,7 @@
 </nav>
 
 <script>
-    /* --- STREAMING_CHUNK:Variaveis Globais e Configuracoes --- */
-    // ⚠️ SUBSTITUA PELA SUA SCRIPT_URL
+    // ⚠️️ SUBSTITUA PELA SUA SCRIPT_URL
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwQjSrJA8FnIpxfrSfw_cPjpeTLvPfhrUotlJUaU6EylD8TJNsQ5LPTVHIRHL9PK-rXIw/exec';
     
     let currentUserId = localStorage.getItem('joyfoods_user_id') || null; 
@@ -1546,8 +1794,8 @@
     let cart = JSON.parse(localStorage.getItem('joyfoods_cart')) || []; 
     let trackingInterval = null; 
     let currentTrackingId = null;
+    let currentStoreLayout = localStorage.getItem('joyfoods_store_layout') || 'list';
 
-    /* --- STREAMING_CHUNK:Funcoes de Interface e Autenticacao --- */
     window.showCustomModal = (title, msg, onConfirm = null, showCancel = false) => {
         document.getElementById('custom-modal-title').innerText = title;
         document.getElementById('custom-modal-msg').innerText = msg;
@@ -1555,6 +1803,7 @@
         
         const btnOk = document.getElementById('custom-modal-btn-ok');
         const btnCancel = document.getElementById('custom-modal-btn-cancel');
+        
         btnCancel.style.display = showCancel ? 'block' : 'none';
         
         btnOk.onclick = () => { 
@@ -1567,7 +1816,7 @@
     };
 
     window.onclick = function(event) {
-        if (!event.target.closest('.profile-btn') && !event.target.closest('.profile-dropdown')) {
+        if (!event.target.closest('.profile-btn') && !event.target.closest('.profile-dropdown') && !event.target.closest('.nav-item')) {
             document.getElementById('profile-dropdown').classList.remove('show');
             document.getElementById('global-overlay').style.display = 'none';
         }
@@ -1595,8 +1844,8 @@
             } else {
                 logout();
             }
-        } catch (e) {
-            console.error("Erro ao checar sessão:", e);
+        } catch (e) { 
+            console.log(e); 
         }
     }
 
@@ -1627,9 +1876,7 @@
         const e = document.getElementById('auth-email').value; 
         const p = document.getElementById('auth-pass').value; 
         
-        if(!e || !p) {
-            return showCustomModal("Erro", "Preencha e-mail e senha!");
-        }
+        if(!e || !p) return showCustomModal("Erro", "Preencha e-mail e senha!");
         
         const btn = document.getElementById('btn-auth-submit'); 
         btn.innerText = "Aguarde..."; 
@@ -1638,7 +1885,11 @@
         try {
             const r = await fetch(SCRIPT_URL, { 
                 method: 'POST', 
-                body: JSON.stringify({ action: isLoginMode ? 'loginUser' : 'registerUser', email: e, senha: p }) 
+                body: JSON.stringify({ 
+                    action: isLoginMode ? 'loginUser' : 'registerUser', 
+                    email: e, 
+                    senha: p 
+                }) 
             });
             const d = await r.json();
             
@@ -1666,25 +1917,27 @@
         location.reload(); 
     };
 
-    /* --- STREAMING_CHUNK:Lojas e Mercado --- */
     async function loadMarketplace() {
         document.getElementById('marketplace-view').style.display = 'block'; 
         document.getElementById('store-view').style.display = 'none'; 
-        currentStore = null;
         
+        const banner = document.querySelector('.green-banner');
+        if(banner) banner.style.display = 'flex';
+        
+        currentStore = null;
         try { 
             const r = await fetch(SCRIPT_URL, { 
                 method: 'POST', 
                 body: JSON.stringify({ action: 'getMarketplaceData' }) 
             }); 
             const d = await r.json(); 
-            
             if (d.status === 'success') { 
                 marketplaceStores = d.lojas; 
-                renderMarketplaceList(marketplaceStores); 
+                renderMarketplaceList(marketplaceStores);
+                updateCartBadge(); // Atualiza carrinho assim que a loja é carregada (corrige a imagem quebrada)
             } 
         } catch (e) {
-            console.error("Erro ao carregar lojas:", e);
+            console.log(e);
         }
     }
 
@@ -1694,7 +1947,6 @@
             const taxa = s.taxa > 0 
                 ? `R$ ${parseFloat(s.taxa).toFixed(2).replace('.',',')}` 
                 : `<span class="free-delivery"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> Grátis</span>`;
-            
             const fakeStar = (Math.random() * (5.0 - 4.2) + 4.2).toFixed(1);
             const fakeDist = (Math.random() * 5 + 1).toFixed(1);
             const fakeTime = Math.floor(Math.random() * 20 + 20);
@@ -1708,10 +1960,7 @@
                         ${!isAberto ? '<span style="color:#ea1d2c; font-size:0.75rem;">(Fechado)</span>' : '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>'}
                     </div>
                     <div class="store-meta">
-                        <span class="store-star">
-                            <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg> 
-                            ${fakeStar}
-                        </span>
+                        <span class="store-star"><svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg> ${fakeStar}</span>
                         <span class="dot-sep">•</span>
                         <span>${s.categoria}</span>
                         <span class="dot-sep">•</span>
@@ -1727,69 +1976,73 @@
         }).join('');
     }
 
-    window.handleSearch = (term) => {
-        if (!marketplaceStores.length) return;
-        const termLow = term.toLowerCase();
-        const filtered = marketplaceStores.filter(s => s.nome.toLowerCase().includes(termLow) || s.categoria.toLowerCase().includes(termLow));
-        renderMarketplaceList(filtered);
-    };
-
-    /* --- STREAMING_CHUNK:Logica Mobile Search e Lojas Específicas --- */
-    window.handleSearchClickMobile = () => {
-        document.getElementById('mobileSearchHeader').classList.add('active');
-        document.getElementById('mobileSearchInput').focus();
-        window.scrollTo(0,0);
-        
-        // Atualiza a navegação inferior
-        document.querySelectorAll('.bottom-nav .nav-item').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.bottom-nav .nav-item')[1].classList.add('active');
+    window.openMobileSearch = () => {
+        document.getElementById('mobileSearchOverlay').classList.add('open');
+        setTimeout(() => document.getElementById('mobileSearchInput').focus(), 300);
     };
 
     window.closeMobileSearch = () => {
-        document.getElementById('mobileSearchHeader').classList.remove('active');
+        document.getElementById('mobileSearchOverlay').classList.remove('open');
         document.getElementById('mobileSearchInput').value = '';
-        handleSearch(''); // Reseta a lista
-        
-        // Retorna a navegação para o Início
-        document.querySelectorAll('.bottom-nav .nav-item').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.bottom-nav .nav-item')[0].classList.add('active');
+        handleSearch('');
+    };
+
+    window.handleSearch = (term) => {
+        if (!marketplaceStores.length) return;
+        const termLow = term.toLowerCase();
+        const filtered = marketplaceStores.filter(s => 
+            s.nome.toLowerCase().includes(termLow) || s.categoria.toLowerCase().includes(termLow)
+        );
+        renderMarketplaceList(filtered);
     };
 
     window.goBackToMarketplace = () => { 
-        if(currentStore) loadMarketplace(); 
+        if(currentStore) {
+            document.getElementById('marketplace-view').style.display = 'block'; 
+            document.getElementById('store-view').style.display = 'none'; 
+            
+            const banner = document.querySelector('.green-banner');
+            if(banner) banner.style.display = 'flex';
+            
+            currentStore = null; 
+        }
     };
 
     window.openStore = async (idLoja) => {
         const s = marketplaceStores.find(x => x.id === idLoja); 
-        if(!s || !s.aberto) {
-            return showCustomModal("Aviso", "Este restaurante está fechado no momento!");
-        }
+        if(!s || !s.aberto) return showCustomModal("Aviso", "Este restaurante está fechado no momento!");
         
         document.getElementById('marketplace-view').style.display = 'none'; 
         document.getElementById('store-view').style.display = 'block'; 
+        
+        const banner = document.querySelector('.green-banner');
+        if(banner) banner.style.display = 'none';
+        
         currentStore = { ...s };
         
         document.getElementById('store-header-panel').innerHTML = `
-            <button onclick="goBackToMarketplace()" style="background:none; border:none; cursor:pointer; color:var(--primary); display:flex; align-items:center; padding:8px; border-radius:50%; margin-right:-5px; transition:0.2s;" onmouseover="this.style.background='#f2f2f2'" onmouseout="this.style.background='transparent'">
+            <button class="btn-back-store" onclick="goBackToMarketplace()">
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
             </button>
             <img class="store-header-logo" src="${s.logo}">
             <div class="store-header-text">
                 <h1>${s.nome}</h1>
                 <div class="store-header-meta">
-                    <span style="color:var(--star);">★ 4.8</span> • <span>${s.categoria}</span> • <span>Mínimo R$ 15,00</span>
+                    <span style="color:var(--star); white-space:nowrap;">★ 4.8</span> 
+                    <span class="dot-sep" style="font-size:0.8rem;">•</span> 
+                    <span style="white-space:nowrap;">${s.categoria}</span> 
+                    <span class="dot-sep" style="font-size:0.8rem;">•</span> 
+                    <span style="white-space:nowrap;">Mínimo R$ 15,00</span>
                 </div>
             </div>`;
 
         document.getElementById('menu-container').innerHTML = '<p style="text-align:center; grid-column:1/-1;">Carregando cardápio...</p>';
-        
         try { 
             const r = await fetch(SCRIPT_URL, { 
                 method: 'POST', 
                 body: JSON.stringify({ action: 'getStoreMenu', idLoja: idLoja }) 
             }); 
             const d = await r.json(); 
-            
             if (d.status === 'success') { 
                 menuItems = d.data.map(i => ({ 
                     id: i.id, 
@@ -1804,30 +2057,28 @@
                 renderMenu(); 
             } 
         } catch (e) {
-            console.error("Erro ao carregar cardápio:", e);
+            console.log(e);
         }
     };
 
     function buildCategoryChips() {
         const uc = [...new Set(menuItems.map(i => i.category))];
-        let html = `<button class="filter-btn" style="background:var(--text-dark); color:var(--white); border-color:var(--text-dark);" onclick="filterCategory('Todas', this)">Todas</button>`;
-        
-        html += uc.map(c => `<button class="filter-btn" onclick="filterCategory('${c}', this)">${c}</button>`).join('');
-        document.getElementById('categories-container').innerHTML = html;
+        document.getElementById('categories-container').innerHTML = `
+            <button class="filter-btn" style="background:var(--text-dark); color:var(--white); border-color:var(--text-dark);" onclick="filterCategory('Todas', this)">Todas</button>
+        ` + uc.map(c => `<button class="filter-btn" onclick="filterCategory('${c}', this)">${c}</button>`).join('');
     }
     
     window.filterCategory = (cat, el) => { 
         currentCategory = cat; 
         document.querySelectorAll('#categories-container .filter-btn').forEach(c => { 
-            c.style.background = 'var(--white)'; 
-            c.style.color = 'var(--text-dark)'; 
-            c.style.borderColor = 'var(--border-dark)'; 
+            c.style.background='var(--white)'; 
+            c.style.color='var(--text-dark)'; 
+            c.style.borderColor='var(--border-dark)'; 
         }); 
-        
         if(el) { 
-            el.style.background = 'var(--text-dark)'; 
-            el.style.color = 'var(--white)'; 
-            el.style.borderColor = 'var(--text-dark)'; 
+            el.style.background='var(--text-dark)'; 
+            el.style.color='var(--white)'; 
+            el.style.borderColor='var(--text-dark)'; 
         } 
         renderMenu(); 
     };
@@ -1847,7 +2098,6 @@
             </div>`).join('');
     }
 
-    /* --- STREAMING_CHUNK:Logica do Produto e Carrinho --- */
     let currentProductView = null;
     let currentProductQty = 1;
 
@@ -1923,17 +2173,41 @@
         localStorage.setItem('joyfoods_cart', JSON.stringify(cart)); 
         updateCartBadge(); 
         closeProductModal();
-        showCustomModal("Sucesso!", `${qty}x ${prod.name} adicionado à sacola.`);
     }
 
     window.updateCartBadge = () => {
         const totalQty = cart.reduce((a,c) => a + c.qty, 0);
-        document.getElementById('cart-badge').innerText = totalQty;
         const totalVal = cart.reduce((a,c) => a + (c.qty * c.unitPrice), 0);
-        document.getElementById('cart-total-text').innerText = `R$ ${totalVal.toFixed(2).replace('.',',')}`;
-        document.getElementById('cart-total').innerText = `R$ ${totalVal.toFixed(2).replace('.',',')}`;
+        const totalStr = `R$ ${totalVal.toFixed(2).replace('.',',')}`;
+
+        // Top Header
+        document.getElementById('cart-badge').innerText = totalQty;
+        document.getElementById('cart-total-text').innerText = totalStr;
+        document.getElementById('cart-total').innerText = totalStr;
+        
         const cartInfoSpan = document.querySelector('.cart-info span:last-child');
         if(cartInfoSpan) cartInfoSpan.innerText = `${totalQty} itens`;
+
+        // Mobile Floating Cart
+        const floatingCart = document.getElementById('floating-cart-bar');
+        const isMobile = window.innerWidth <= 768;
+        
+        if (totalQty > 0 && isMobile) {
+            document.getElementById('floating-cart-items-count').innerText = `${totalQty} item(s)`;
+            document.getElementById('floating-cart-total').innerText = totalStr;
+            
+            if(cart.length > 0 && marketplaceStores.length > 0) {
+                const lojaDoCarrinho = marketplaceStores.find(s => s.id === cart[0].idLoja);
+                if(lojaDoCarrinho) {
+                    document.getElementById('floating-store-logo').src = lojaDoCarrinho.logo;
+                } else if(currentStore && currentStore.id === cart[0].idLoja) {
+                    document.getElementById('floating-store-logo').src = currentStore.logo;
+                }
+            }
+            floatingCart.classList.add('visible');
+        } else {
+            floatingCart.classList.remove('visible');
+        }
     };
 
     window.toggleCart = () => { 
@@ -1979,7 +2253,6 @@
         if(cart.length === 0) toggleCart();
     };
 
-    /* --- STREAMING_CHUNK:Logica do Pedido Final e Rastreio --- */
     let tempOrderData = null;
 
     window.finalizeOrder = async () => {
@@ -2016,21 +2289,17 @@
             const totalComTaxa = sub + parseFloat(cartStore.taxa);
             totalStr = `R$ ${totalComTaxa.toFixed(2).replace('.',',')}`;
         }
-        
         const itens = cart.map(i=>`${i.qty}x ${i.name}${i.obs ? ` (Obs: ${i.obs})` : ''}`).join(' | ');
 
         tempOrderData = { nome, phone, end, pagamento, totalStr, itens, idLoja, cartStore };
 
         if(pagamento === 'Pix') {
             const btn = document.getElementById('btn-submit-order');
-            btn.disabled = true; btn.innerText = "Buscando PIX...";
+            btn.disabled = true; 
+            btn.innerText = "Buscando PIX...";
             
-            // Trava de Segurança: Busca a chave e o WhatsApp mais recentes
             try {
-                const res = await fetch(SCRIPT_URL, { 
-                    method: 'POST', 
-                    body: JSON.stringify({ action: 'getMarketplaceData' }) 
-                });
+                const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'getMarketplaceData' }) });
                 const data = await res.json();
                 if(data.status === 'success') {
                     const lojaAtualizada = data.lojas.find(s => s.id === idLoja);
@@ -2039,9 +2308,12 @@
                         if(lojaAtualizada.whatsapp) cartStore.whatsapp = lojaAtualizada.whatsapp;
                     }
                 }
-            } catch(e) {}
+            } catch(e) {
+                console.log(e);
+            }
             
-            btn.disabled = false; btn.innerText = "Finalizar Pedido";
+            btn.disabled = false; 
+            btn.innerText = "Finalizar Pedido";
 
             document.getElementById('pix-key-display').innerText = cartStore.chavePix || "Chave PIX não cadastrada pela loja";
             toggleCart();
@@ -2076,7 +2348,10 @@
 
     async function processarPedido(orderData) {
         const btn = document.getElementById('btn-submit-order');
-        if(btn) { btn.disabled = true; btn.innerText = "Enviando..."; }
+        if(btn) { 
+            btn.disabled = true; 
+            btn.innerText = "Enviando..."; 
+        }
 
         try {
             await fetch(SCRIPT_URL, { 
@@ -2097,6 +2372,7 @@
             cart = []; 
             localStorage.setItem('joyfoods_cart', JSON.stringify(cart)); 
             if(window.updateCartBadge) updateCartBadge(); 
+            
             if(document.getElementById('cart-drawer') && document.getElementById('cart-drawer').classList.contains('open')) {
                 toggleCart();
             }
@@ -2104,7 +2380,9 @@
             if(orderData.cartStore.whatsapp) {
                 let wppNum = String(orderData.cartStore.whatsapp).replace(/\D/g, ''); 
                 if(wppNum.length > 0 && !wppNum.startsWith('55')) wppNum = '55' + wppNum; 
+                
                 let msg = `*NOVO PEDIDO (Marketplace)*\nNome: ${orderData.nome}\nEnd: ${orderData.end}\nItens: ${orderData.itens}\n*Total: ${orderData.totalStr}*\nForma de Pagamento: ${orderData.pagamento}`;
+                
                 if(orderData.pagamento === 'Pix') msg += `\n\n_Estou enviando meu comprovante logo abaixo!_ 📄`;
                 
                 window.location.href = `https://wa.me/${wppNum}?text=${encodeURIComponent(msg)}`;
@@ -2116,7 +2394,10 @@
             showCustomModal("Erro", "Falha de conexão com a loja."); 
         }
         
-        if(btn) { btn.disabled = false; btn.innerText = "Finalizar Pedido"; }
+        if(btn) { 
+            btn.disabled = false; 
+            btn.innerText = "Finalizar Pedido"; 
+        }
     }
 
     window.openHistoryModal = async () => {
@@ -2140,10 +2421,7 @@
             if(d.status === 'success' && d.orders.length > 0) {
                 c.innerHTML = d.orders.reverse().map(o => `
                     <div class="history-card">
-                        <div class="history-header">
-                            <span>${o.data.substring(0,16)}</span>
-                            <span class="status-badge">${o.status}</span>
-                        </div>
+                        <div class="history-header"><span>${o.data.substring(0,16)}</span><span class="status-badge">${o.status}</span></div>
                         <div style="font-size:0.9rem; color:var(--text-dark); margin-bottom:10px;">${o.itens}</div>
                         <div style="font-weight:800; color:var(--text-dark);">${o.total}</div>
                         ${o.status !== 'Concluido' ? `<button class="btn-track" onclick="openTrackingModal('${o.id}')">Acompanhar Pedido</button>` : ''}
@@ -2180,7 +2458,6 @@
                 body: JSON.stringify({ action: 'trackOrder', id: currentTrackingId }) 
             }); 
             const d = await r.json();
-            
             if (d.status === 'success') {
                 ['novo', 'prep', 'saiu', 'ok'].forEach(s => document.getElementById(`trk-step-${s}`).classList.remove('active', 'current'));
                 
@@ -2193,14 +2470,17 @@
                 
                 if (d.orderStatus === 'Novo') {
                     document.getElementById('trk-step-novo').classList.add('active', 'current');
-                } else if (d.orderStatus === 'Preparando') { 
+                }
+                else if (d.orderStatus === 'Preparando') { 
                     document.getElementById('trk-step-novo').classList.add('active'); 
                     document.getElementById('trk-step-prep').classList.add('active', 'current'); 
-                } else if (d.orderStatus === 'Entrega') { 
+                }
+                else if (d.orderStatus === 'Entrega') { 
                     document.getElementById('trk-step-novo').classList.add('active'); 
                     document.getElementById('trk-step-prep').classList.add('active'); 
                     document.getElementById('trk-step-saiu').classList.add('active', 'current'); 
-                } else if (d.orderStatus === 'Concluido') { 
+                }
+                else if (d.orderStatus === 'Concluido') { 
                     document.getElementById('trk-step-novo').classList.add('active'); 
                     document.getElementById('trk-step-prep').classList.add('active'); 
                     document.getElementById('trk-step-saiu').classList.add('active'); 
@@ -2208,7 +2488,9 @@
                     clearInterval(trackingInterval); 
                 }
             }
-        } catch(e) {}
+        } catch(e) {
+            console.log(e);
+        }
     }
 
     window.closeAllModais = () => { 
@@ -2233,35 +2515,57 @@
         }
     }, 3500);
     
-    window.onload = () => { 
-        loadMarketplace(); 
-        updateCartBadge(); 
-        checkSession(); 
-        initPWA();
-    };
+    function toggleStoreLayout() {
+        currentStoreLayout = currentStoreLayout === 'list' ? 'grid' : 'list';
+        localStorage.setItem('joyfoods_store_layout', currentStoreLayout);
+        applyStoreLayout();
+    }
 
-    /* --- STREAMING_CHUNK:Inicializacao do Service Worker PWA --- */
+    function applyStoreLayout() {
+        const container = document.getElementById('stores-list-container');
+        const btn = document.getElementById('layout-toggle-btn');
+        if(!container || !btn) return;
+        
+        if (currentStoreLayout === 'grid') {
+            container.classList.remove('list-view');
+            container.classList.add('grid-view');
+            btn.innerHTML = `<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h18v-2H3v2zm0 5h18v-2H3v2zm0-10v2h18V8H3z"/></svg>`;
+        } else {
+            container.classList.remove('grid-view');
+            container.classList.add('list-view');
+            btn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 0h6v6h-6v-6z"/></svg>`;
+        }
+    }
+    
     function initPWA() {
         if ('serviceWorker' in navigator) {
             const swCode = `
-                self.addEventListener('install', (e) => {
-                    self.skipWaiting();
+                const CACHE_NAME = 'joyfoods-cache-v1';
+                self.addEventListener('install', e => {
+                    e.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(['/'])));
                 });
-                self.addEventListener('activate', (e) => {
-                    e.waitUntil(clients.claim());
-                });
-                self.addEventListener('fetch', (e) => {
-                    e.respondWith(fetch(e.request).catch(() => new Response('App Offline')));
+                self.addEventListener('fetch', e => {
+                    e.respondWith(caches.match(e.request).then(res => res || fetch(e.request)));
                 });
             `;
             const swBlob = new Blob([swCode], {type: 'application/javascript'});
             const swUrl = URL.createObjectURL(swBlob);
             
             navigator.serviceWorker.register(swUrl)
-                .then(reg => console.log('PWA Service Worker registrado!'))
-                .catch(err => console.error('Falha ao registrar Service Worker:', err));
+                .then(reg => console.log('PWA Pronto!', reg))
+                .catch(err => console.log('Erro no PWA:', err));
         }
     }
+    
+    window.addEventListener('resize', updateCartBadge);
+    
+    window.onload = () => { 
+        applyStoreLayout(); // Aplica a visualização escolhida pelo usuário (Grade ou Lista) logo que entra no app
+        loadMarketplace(); 
+        updateCartBadge(); 
+        checkSession(); 
+        initPWA(); 
+    };
 </script>
 </body>
 </html>
