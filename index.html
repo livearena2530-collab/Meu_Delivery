@@ -1183,35 +1183,35 @@
         }
         
         @media (max-width: 768px) {
-            #product-details-modal .modal-box { 
-                flex-direction: column; 
-                width: 100%; 
-                height: 100%; 
-                max-height: none; 
-                border-radius: 0; 
+            #product-details-modal .modal-box { flex-direction: column; width: 100%; height: 100%; max-height: none; border-radius: 0; }
+            .prod-left { width: 100%; height: 280px; flex-shrink: 0; }
+            .prod-right { width: 100%; flex: 1; padding: 20px; max-height: none; }
+            .prod-footer { position: sticky; bottom: 0; background: var(--white); margin: auto -20px -20px -20px; padding: 20px; box-shadow: 0 -4px 12px rgba(0,0,0,0.05); }
+            .btn-close-modal { top: 15px; left: 15px; right: auto; background: rgba(255,255,255,0.9); box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        }
+
+        .mobile-search-header { display: none; }
+
+        @media (max-width: 768px) {
+            .header-container { padding: 12px 15px; flex-wrap: nowrap; }
+            .nav-links, .location-btn, .profile-btn span, .cart-info { display: none; }
+            .search-container { display: none; } /* Oculta a busca padrão no celular */
+            
+            /* --- Nova Barra de Busca Mobile (Estilo iFood) --- */
+            .mobile-search-header.active { 
+                display: flex; position: fixed; top: 0; left: 0; right: 0; height: 60px; 
+                background: var(--white); z-index: 200; align-items: center; padding: 0 15px; gap: 15px; 
+                box-shadow: var(--shadow-sm); animation: slideDown 0.2s ease;
             }
-            .prod-left { 
-                width: 100%; 
-                height: 280px; 
-                flex-shrink: 0; 
-            }
-            .prod-right { 
-                width: 100%; 
-                flex: 1; 
-                padding: 20px; 
-                max-height: none; 
-            }
-            .prod-footer { 
-                position: sticky; 
-                bottom: 0; 
-                background: var(--white); 
-                margin: auto -20px -20px -20px; 
-                padding: 20px; 
-                box-shadow: 0 -4px 12px rgba(0,0,0,0.05); 
-            }
-            .btn-close-modal { 
-                top: 15px; 
-                left: 15px; 
+            .mobile-search-input-wrapper { flex: 1; background: #f2f2f2; border-radius: 8px; display: flex; align-items: center; padding: 0 10px; height: 40px;}
+            .mobile-search-input-wrapper input { width: 100%; border: none; background: transparent; outline: none; padding-left: 10px; font-size: 0.95rem; color: var(--text-dark); }
+            .btn-close-search { background: none; border: none; cursor: pointer; color: var(--text-dark); display: flex; align-items: center; justify-content: center; }
+
+            .header-right { gap: 15px; }
+            .bottom-nav { display: flex; }
+            main { padding-bottom: 80px; }
+            .menu-grid, .stores-grid { grid-template-columns: 1fr; }
+            .profile-dropdown { position: fixed; bottom: 0; top: auto; right: 0; width: 100%; border-radius: 16px 16px 0 0; border: none; }
                 right: auto; 
                 background: rgba(255,255,255,0.9); 
                 box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
@@ -1335,6 +1335,17 @@
         </div>
     </div>
 </header>
+
+<!-- Barra de Busca Mobile (Invisível por padrão) -->
+<div class="mobile-search-header" id="mobileSearchHeader">
+    <button class="btn-close-search" onclick="closeMobileSearch()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+    </button>
+    <div class="mobile-search-input-wrapper">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="var(--primary)"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <input type="text" id="mobileSearchInput" placeholder="Busque por item ou loja" oninput="handleSearch(this.value)">
+    </div>
+</div>
 
 <div class="green-banner">
     <svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.41l9 9c.36.36.86.58 1.41.58s1.05-.22 1.41-.59l7-7c.38-.37.59-.88.59-1.41s-.23-1.04-.59-1.41zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
@@ -1727,31 +1738,31 @@
     window.handleSearch = (term) => {
         if (!marketplaceStores.length) return;
         const termLow = term.toLowerCase();
-        const filtered = marketplaceStores.filter(s => 
-            s.nome.toLowerCase().includes(termLow) || s.categoria.toLowerCase().includes(termLow)
-        );
+        const filtered = marketplaceStores.filter(s => s.nome.toLowerCase().includes(termLow) || s.categoria.toLowerCase().includes(termLow));
         renderMarketplaceList(filtered);
     };
 
     window.handleSearchClickMobile = () => {
-        document.getElementById('searchInput').focus();
+        document.getElementById('mobileSearchHeader').classList.add('active');
+        document.getElementById('mobileSearchInput').focus();
         window.scrollTo(0,0);
-    }
-
-    window.goBackToMarketplace = () => { 
-        if(currentStore) loadMarketplace(); 
+        
+        // Atualiza a navegação inferior
+        document.querySelectorAll('.bottom-nav .nav-item').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.bottom-nav .nav-item')[1].classList.add('active');
     };
 
-    window.openStore = async (idLoja) => {
-        const s = marketplaceStores.find(x => x.id === idLoja); 
-        if(!s || !s.aberto) return showCustomModal("Aviso", "Este restaurante está fechado no momento!");
+    window.closeMobileSearch = () => {
+        document.getElementById('mobileSearchHeader').classList.remove('active');
+        document.getElementById('mobileSearchInput').value = '';
+        handleSearch(''); // Reseta a lista
         
-        document.getElementById('marketplace-view').style.display = 'none'; 
-        document.getElementById('store-view').style.display = 'block'; 
-        currentStore = { ...s };
-        
-        document.getElementById('store-header-panel').innerHTML = `
-            <button onclick="goBackToMarketplace()" style="background:none; border:none; cursor:pointer; color:var(--primary); display:flex; align-items:center; padding:8px; border-radius:50%; margin-right:-5px; transition:0.2s;" onmouseover="this.style.background='#f2f2f2'" onmouseout="this.style.background='transparent'">
+        // Retorna a navegação para o Início
+        document.querySelectorAll('.bottom-nav .nav-item').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.bottom-nav .nav-item')[0].classList.add('active');
+    };
+
+    window.goBackToMarketplace = () => { if(currentStore) loadMarketplace(); };
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
             </button>
             <img class="store-header-logo" src="${s.logo}">
