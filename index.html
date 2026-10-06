@@ -10,10 +10,14 @@
     <meta name="apple-mobile-web-app-title" content="JoyFoods">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1046/1046784.png">
     
+    <!-- Link para o Manifest do PWA -->
+    <link rel="manifest" href="manifest.json">
+    
     <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/1046/1046784.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
+        /* --- STREAMING_CHUNK:Definindo as Variaveis de Cor e Base --- */
         :root { 
             --primary: #ea1d2c; 
             --primary-dark: #cc1523; 
@@ -59,6 +63,7 @@
             backdrop-filter: blur(2px); 
         }
         
+        /* --- STREAMING_CHUNK:Estilizando o Cabecalho --- */
         header { 
             background: var(--white); 
             position: sticky; 
@@ -244,6 +249,7 @@
             font-weight: 700; 
         }
 
+        /* --- STREAMING_CHUNK:Estilizando Dropdown e Banners --- */
         .profile-dropdown { 
             position: absolute; 
             top: 60px; 
@@ -387,6 +393,7 @@
             } 
         }
 
+        /* --- STREAMING_CHUNK:Estilizando o Marketplace e Lojas --- */
         main { 
             flex: 1; 
             width: 100%; 
@@ -540,6 +547,7 @@
             height: 14px; 
         }
 
+        /* --- STREAMING_CHUNK:Estilizando o Menu da Loja --- */
         .store-header-info { 
             display: flex; 
             align-items: center; 
@@ -609,8 +617,8 @@
             font-size: 0.85rem; 
             color: var(--text-light); 
             line-height: 1.4; 
-            display: -webkit-box; 
-            line-clamp: 2; /* Adicionado para evitar o aviso no editor */
+            display: -webkit-box;
+            line-clamp: 2; /* Regra padrão atualizada para evitar warnings */
             -webkit-line-clamp: 2; 
             -webkit-box-orient: vertical; 
             overflow: hidden; 
@@ -631,6 +639,7 @@
             flex-shrink: 0; 
         }
 
+        /* --- STREAMING_CHUNK:Estilizando Modais e Carrinho --- */
         #cart-drawer { 
             position: fixed; 
             top: 0; 
@@ -949,6 +958,11 @@
             70% { box-shadow: 0 0 0 8px rgba(234, 29, 44, 0); } 
         }
 
+        /* --- STREAMING_CHUNK:Estilizando o Mobile Search Header --- */
+        .mobile-search-header { 
+            display: none; 
+        }
+
         .bottom-nav { 
             display: none; 
             position: fixed; 
@@ -990,7 +1004,6 @@
             font-weight: 500; 
         }
 
-        /* --- STREAMING_CHUNK:Styling the Product Details Modal... --- */
         #product-details-modal .modal-box { 
             max-width: 850px; 
             padding: 0; 
@@ -1182,27 +1195,27 @@
             background: var(--primary-dark); 
         }
         
+        /* --- STREAMING_CHUNK:Estilos Responsivos Completos --- */
         @media (max-width: 768px) {
             #product-details-modal .modal-box { flex-direction: column; width: 100%; height: 100%; max-height: none; border-radius: 0; }
             .prod-left { width: 100%; height: 280px; flex-shrink: 0; }
             .prod-right { width: 100%; flex: 1; padding: 20px; max-height: none; }
             .prod-footer { position: sticky; bottom: 0; background: var(--white); margin: auto -20px -20px -20px; padding: 20px; box-shadow: 0 -4px 12px rgba(0,0,0,0.05); }
             .btn-close-modal { top: 15px; left: 15px; right: auto; background: rgba(255,255,255,0.9); box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        }
-
-        .mobile-search-header { display: none; }
-
-        @media (max-width: 768px) {
+            
             .header-container { padding: 12px 15px; flex-wrap: nowrap; }
             .nav-links, .location-btn, .profile-btn span, .cart-info { display: none; }
-            .search-container { display: none; } /* Oculta a busca padrão no celular */
             
-            /* --- Nova Barra de Busca Mobile (Estilo iFood) --- */
+            /* Oculta a busca padrão no celular */
+            .search-container { display: none; } 
+            
+            /* Nova Barra de Busca Mobile (Estilo iFood) */
             .mobile-search-header.active { 
                 display: flex; position: fixed; top: 0; left: 0; right: 0; height: 60px; 
                 background: var(--white); z-index: 200; align-items: center; padding: 0 15px; gap: 15px; 
                 box-shadow: var(--shadow-sm); animation: slideDown 0.2s ease;
             }
+            
             .mobile-search-input-wrapper { flex: 1; background: #f2f2f2; border-radius: 8px; display: flex; align-items: center; padding: 0 10px; height: 40px;}
             .mobile-search-input-wrapper input { width: 100%; border: none; background: transparent; outline: none; padding-left: 10px; font-size: 0.95rem; color: var(--text-dark); }
             .btn-close-search { background: none; border: none; cursor: pointer; color: var(--text-dark); display: flex; align-items: center; justify-content: center; }
@@ -1210,36 +1223,9 @@
             .header-right { gap: 15px; }
             .bottom-nav { display: flex; }
             main { padding-bottom: 80px; }
+            
             .menu-grid, .stores-grid { grid-template-columns: 1fr; }
-            .profile-dropdown { position: fixed; bottom: 0; top: auto; right: 0; width: 100%; border-radius: 16px 16px 0 0; border: none; }
-                right: auto; 
-                background: rgba(255,255,255,0.9); 
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
-            }
-            .header-container { 
-                padding: 12px 15px; 
-            }
-            .nav-links, .location-btn, .profile-btn span, .cart-info { 
-                display: none; 
-            }
-            .search-container { 
-                order: 3; 
-                width: 100%; 
-                max-width: 100%; 
-                margin-top: 10px; 
-            }
-            .header-right { 
-                gap: 15px; 
-            }
-            .bottom-nav { 
-                display: flex; 
-            }
-            main { 
-                padding-bottom: 80px; 
-            }
-            .menu-grid, .stores-grid { 
-                grid-template-columns: 1fr; 
-            }
+            
             .profile-dropdown { 
                 position: fixed; 
                 bottom: 0; 
@@ -1249,13 +1235,12 @@
                 border-radius: 16px 16px 0 0; 
                 border: none; 
             }
-            .profile-dropdown.show { 
-                animation: slideUp 0.3s ease; 
-            }
-            @keyframes slideUp { 
-                from { transform: translateY(100%); } 
-                to { transform: translateY(0); } 
-            }
+            .profile-dropdown.show { animation: slideUp 0.3s ease; }
+        }
+
+        @keyframes slideUp { 
+            from { transform: translateY(100%); } 
+            to { transform: translateY(0); } 
         }
     </style>
 </head>
@@ -1263,6 +1248,7 @@
 
 <div id="global-overlay" onclick="closeAllModais()"></div>
 
+<!-- --- STREAMING_CHUNK:Header Principal --- -->
 <header id="main-header">
     <div class="header-container">
         <div class="header-left">
@@ -1278,6 +1264,7 @@
             </div>
         </div>
 
+        <!-- Ocultado via CSS no Mobile -->
         <div class="search-container">
             <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
             <input type="text" id="searchInput" placeholder="Busque por item ou loja" oninput="handleSearch(this.value)">
@@ -1336,7 +1323,8 @@
     </div>
 </header>
 
-<!-- Barra de Busca Mobile (Invisível por padrão) -->
+<!-- --- STREAMING_CHUNK:Barra de Busca Mobile Overlay --- -->
+<!-- Barra de Busca Mobile Animada (Invisível por padrão) -->
 <div class="mobile-search-header" id="mobileSearchHeader">
     <button class="btn-close-search" onclick="closeMobileSearch()">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
@@ -1352,6 +1340,7 @@
     Você tem 2 cupons! Aproveite seus descontos
 </div>
 
+<!-- --- STREAMING_CHUNK:Corpo do Marketplace e Loja --- -->
 <main id="marketplace-view">
     <div class="promo-carousel">
         <div class="carousel-track" id="promo-track">
@@ -1385,6 +1374,7 @@
     </div>
 </main>
 
+<!-- --- STREAMING_CHUNK:Carrinho e Modais do Sistema --- -->
 <div id="cart-drawer">
     <div class="drawer-header">
         <span>Sua Sacola</span>
@@ -1454,7 +1444,6 @@
     </div>
 </div>
 
-<!-- Modal Genérico de Aviso -->
 <div class="modal-container" id="custom-modal">
     <div class="modal-box">
         <h2 class="modal-title" id="custom-modal-title">Aviso</h2>
@@ -1466,7 +1455,6 @@
     </div>
 </div>
 
-<!-- Modal de Pagamento PIX -->
 <div class="modal-container" id="pix-modal">
     <div class="modal-box">
         <h2 class="modal-title">Pagamento via PIX</h2>
@@ -1523,6 +1511,7 @@
     </div>
 </div>
 
+<!-- --- STREAMING_CHUNK:Barra de Navegacao Inferior (Mobile) --- -->
 <nav class="bottom-nav">
     <button class="nav-item active" onclick="goBackToMarketplace()">
         <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
@@ -1543,6 +1532,7 @@
 </nav>
 
 <script>
+    /* --- STREAMING_CHUNK:Variaveis Globais e Configuracoes --- */
     // ⚠️ SUBSTITUA PELA SUA SCRIPT_URL
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwQjSrJA8FnIpxfrSfw_cPjpeTLvPfhrUotlJUaU6EylD8TJNsQ5LPTVHIRHL9PK-rXIw/exec';
     
@@ -1557,6 +1547,7 @@
     let trackingInterval = null; 
     let currentTrackingId = null;
 
+    /* --- STREAMING_CHUNK:Funcoes de Interface e Autenticacao --- */
     window.showCustomModal = (title, msg, onConfirm = null, showCancel = false) => {
         document.getElementById('custom-modal-title').innerText = title;
         document.getElementById('custom-modal-msg').innerText = msg;
@@ -1675,6 +1666,7 @@
         location.reload(); 
     };
 
+    /* --- STREAMING_CHUNK:Lojas e Mercado --- */
     async function loadMarketplace() {
         document.getElementById('marketplace-view').style.display = 'block'; 
         document.getElementById('store-view').style.display = 'none'; 
@@ -1742,6 +1734,7 @@
         renderMarketplaceList(filtered);
     };
 
+    /* --- STREAMING_CHUNK:Logica Mobile Search e Lojas Específicas --- */
     window.handleSearchClickMobile = () => {
         document.getElementById('mobileSearchHeader').classList.add('active');
         document.getElementById('mobileSearchInput').focus();
@@ -1762,7 +1755,22 @@
         document.querySelectorAll('.bottom-nav .nav-item')[0].classList.add('active');
     };
 
-    window.goBackToMarketplace = () => { if(currentStore) loadMarketplace(); };
+    window.goBackToMarketplace = () => { 
+        if(currentStore) loadMarketplace(); 
+    };
+
+    window.openStore = async (idLoja) => {
+        const s = marketplaceStores.find(x => x.id === idLoja); 
+        if(!s || !s.aberto) {
+            return showCustomModal("Aviso", "Este restaurante está fechado no momento!");
+        }
+        
+        document.getElementById('marketplace-view').style.display = 'none'; 
+        document.getElementById('store-view').style.display = 'block'; 
+        currentStore = { ...s };
+        
+        document.getElementById('store-header-panel').innerHTML = `
+            <button onclick="goBackToMarketplace()" style="background:none; border:none; cursor:pointer; color:var(--primary); display:flex; align-items:center; padding:8px; border-radius:50%; margin-right:-5px; transition:0.2s;" onmouseover="this.style.background='#f2f2f2'" onmouseout="this.style.background='transparent'">
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
             </button>
             <img class="store-header-logo" src="${s.logo}">
@@ -1839,7 +1847,7 @@
             </div>`).join('');
     }
 
-    /* --- Modal de Produto --- */
+    /* --- STREAMING_CHUNK:Logica do Produto e Carrinho --- */
     let currentProductView = null;
     let currentProductQty = 1;
 
@@ -1971,6 +1979,7 @@
         if(cart.length === 0) toggleCart();
     };
 
+    /* --- STREAMING_CHUNK:Logica do Pedido Final e Rastreio --- */
     let tempOrderData = null;
 
     window.finalizeOrder = async () => {
@@ -2231,14 +2240,8 @@
         initPWA();
     };
 
+    /* --- STREAMING_CHUNK:Inicializacao do Service Worker PWA --- */
     function initPWA() {
-        // 1. Injeta o Manifest PWA
-        const manifestLink = document.createElement('link');
-        manifestLink.rel = 'manifest';
-        manifestLink.href = 'manifest.json';
-        document.head.appendChild(manifestLink);
-
-        // 2. Injeta o Service Worker via Blob (Cache nativo offline básico)
         if ('serviceWorker' in navigator) {
             const swCode = `
                 self.addEventListener('install', (e) => {
@@ -2248,7 +2251,6 @@
                     e.waitUntil(clients.claim());
                 });
                 self.addEventListener('fetch', (e) => {
-                    // Mantém o comportamento de rede normal, mas permite instalação
                     e.respondWith(fetch(e.request).catch(() => new Response('App Offline')));
                 });
             `;
@@ -2256,8 +2258,8 @@
             const swUrl = URL.createObjectURL(swBlob);
             
             navigator.serviceWorker.register(swUrl)
-                .then(reg => console.log('✅ PWA Service Worker registrado!'))
-                .catch(err => console.error('❌ Falha ao registrar Service Worker:', err));
+                .then(reg => console.log('PWA Service Worker registrado!'))
+                .catch(err => console.error('Falha ao registrar Service Worker:', err));
         }
     }
 </script>
